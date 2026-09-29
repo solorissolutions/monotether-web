@@ -136,10 +136,11 @@
         <img src="assets/mark-white.png" alt="" class="access__mark" width="72" height="75" loading="lazy">
         <h2>Join the choir early.</h2>
         <p class="lead">Be first to try ChoirMaster OS. One email when it's ready — nothing else.</p>
-        <form class="signup" id="signup">
+        <form class="signup" id="signup" action="https://formspree.io/f/mjykjoln" method="POST">
           <label for="email" class="sr-only">Email address</label>
           <input id="email" name="email" type="email" required placeholder="you@email.com" autocomplete="email">
-          <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="_subject" value="New ChoirMaster OS early access signup">
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" class="btn">Request access</button>
         </form>
         <p class="signup__note" id="signup-note" role="status"></p>
@@ -160,42 +161,38 @@
   </footer>
 
   <script>
-    // Waitlist: paste your Google Apps Script Web app URL here (see README).
-    // Left empty, the form falls back to opening an email to CONTACT_EMAIL.
-    const SHEET_ENDPOINT = '';
-    const CONTACT_EMAIL = 'hello@monotether.com';
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // Waitlist: submit to Formspree without leaving the page.
+    // Without JS, the form's action/method still posts to Formspree directly.
     const form = document.getElementById('signup');
     const note = document.getElementById('signup-note');
     const button = form.querySelector('button');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = form.email.value.trim();
-
-      if (!SHEET_ENDPOINT) {
-        const subject = encodeURIComponent('ChoirMaster OS early access');
-        const body = encodeURIComponent('Please add me to the early access list: ' + email);
-        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-        return;
-      }
-
       button.disabled = true;
       button.textContent = 'Sending…';
       note.textContent = '';
+      form.email.removeAttribute('aria-invalid');
+
       try {
-        // Simple form-encoded POST; no-cors because Apps Script redirects the response.
-        await fetch(SHEET_ENDPOINT, {
+        const res = await fetch(form.action, {
           method: 'POST',
-          mode: 'no-cors',
-          body: new URLSearchParams({ email, company: form.company.value, source: location.href }),
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
         });
-        form.reset();
-        note.textContent = "You're on the list. Welcome to the choir.";
+        if (res.ok) {
+          form.reset();
+          note.textContent = "You're on the list. Welcome to the choir.";
+        } else {
+          const data = await res.json().catch(() => ({}));
+          const errors = data.errors || [];
+          if (errors.some((err) => err.field === 'email')) form.email.setAttribute('aria-invalid', 'true');
+          note.textContent = errors.map((err) => err.message).join(' ') || 'Something went wrong. Please try again.';
+        }
       } catch {
-        note.textContent = 'Something went wrong. Please try again.';
+        note.textContent = 'Network error. Please try again.';
       } finally {
         button.disabled = false;
         button.textContent = 'Request access';
