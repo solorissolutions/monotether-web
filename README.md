@@ -14,7 +14,10 @@ python3 -m http.server 8000   # then open http://localhost:8000
 Any static host works (Vercel, Netlify, GitHub Pages). Point it at the repo root.
 
 ## Files
-- `index.html` — the page
+- `index.html` — Monotether home page
+- `choirmaster/index.html` — ChoirMaster OS product page (`/choirmaster`)
+- `script.js` — shared JS (waitlist form, footer year)
+- `vercel.json` — clean URLs (`/choirmaster` instead of `/choirmaster/`)
 - `styles.css` — the styles (colors live at the top in `:root`)
 - `assets/` — logo mark, penguin, favicon, social share image
 

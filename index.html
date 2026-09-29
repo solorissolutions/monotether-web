@@ -29,7 +29,7 @@
         <span>MONOTETHER</span>
       </a>
       <nav class="nav__links" aria-label="Main">
-        <a href="#choirmaster">ChoirMaster OS</a>
+        <a href="/choirmaster">ChoirMaster OS</a>
         <a href="#how">How it works</a>
         <a href="#principle">Principle</a>
       </nav>
@@ -51,7 +51,7 @@
         </p>
         <div class="hero__cta">
           <a href="#access" class="btn">Get early access</a>
-          <a href="#choirmaster" class="btn btn--ghost">Meet ChoirMaster OS <span aria-hidden="true">→</span></a>
+          <a href="/choirmaster" class="btn btn--ghost">Meet ChoirMaster OS <span aria-hidden="true">→</span></a>
         </div>
       </div>
       <img class="hero__mark" src="assets/mark-white.png" alt="" aria-hidden="true" width="612" height="641">
@@ -77,22 +77,23 @@
         <div class="product__copy">
           <p class="label">The product</p>
           <h2>ChoirMaster OS</h2>
-          <p class="lead">The conductor for everything you use. One place that keeps your digital life in time — quietly, automatically, every day.</p>
+          <p class="lead">The operating system you talk to. AI isn't an app on top — it <em>is</em> the system. Tell your laptop what you want, and it handles the rest.</p>
 
           <ul class="features">
             <li>
               <span class="features__num">01</span>
-              <div><h3>Everything, one place</h3><p>Apps, accounts, files and to-dos, tethered into a single calm surface.</p></div>
+              <div><h3>Just say it</h3><p>No menus, no settings hunts. Ask in plain words and your system does it.</p></div>
             </li>
             <li>
               <span class="features__num">02</span>
-              <div><h3>It conducts, you live</h3><p>Repeat work, reminders and hand-offs happen on cue. No setup marathons.</p></div>
+              <div><h3>Rewind anytime</h3><p>A snapshot of your system from day one. If anything goes wrong, roll back in one step.</p></div>
             </li>
             <li>
               <span class="features__num">03</span>
-              <div><h3>Made for everyday people</h3><p>No manuals, no jargon, no IT department required. If it needs explaining, we fix it.</p></div>
+              <div><h3>Learns you</h3><p>Shaped around you from the first setup, and it picks up your habits and pain points over time.</p></div>
             </li>
           </ul>
+          <a href="/choirmaster" class="btn btn--ghost product__more">Explore ChoirMaster OS <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
@@ -101,19 +102,19 @@
     <section id="how" class="how">
       <div class="wrap">
         <p class="label">How it works</p>
-        <h2 class="section-title">Three steps. Then it just runs.</h2>
+        <h2 class="section-title">Three steps. Then just talk.</h2>
         <ol class="steps">
           <li>
-            <span class="steps__tag">Tether</span>
-            <p>Connect the things you already use. One sign-in, one time.</p>
+            <span class="steps__tag">Install</span>
+            <p>Download ChoirMaster OS for your laptop and install it.</p>
           </li>
           <li>
-            <span class="steps__tag">Conduct</span>
-            <p>ChoirMaster learns your rhythm and keeps every part in sync.</p>
+            <span class="steps__tag">Introduce</span>
+            <p>A short onboarding tells your system who you are and how you work.</p>
           </li>
           <li>
-            <span class="steps__tag">Together</span>
-            <p>You get your hours — and your head space — back.</p>
+            <span class="steps__tag">Talk</span>
+            <p>Ask for what you need. It learns as you go — you get your time back.</p>
           </li>
         </ol>
       </div>
@@ -162,44 +163,6 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Waitlist: submit to Formspree without leaving the page.
-    // Without JS, the form's action/method still posts to Formspree directly.
-    const form = document.getElementById('signup');
-    const note = document.getElementById('signup-note');
-    const button = form.querySelector('button');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      button.disabled = true;
-      button.textContent = 'Sending…';
-      note.textContent = '';
-      form.email.removeAttribute('aria-invalid');
-
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { Accept: 'application/json' },
-        });
-        if (res.ok) {
-          form.reset();
-          note.textContent = "You're on the list. Welcome to the choir.";
-        } else {
-          const data = await res.json().catch(() => ({}));
-          const errors = data.errors || [];
-          if (errors.some((err) => err.field === 'email')) form.email.setAttribute('aria-invalid', 'true');
-          note.textContent = errors.map((err) => err.message).join(' ') || 'Something went wrong. Please try again.';
-        }
-      } catch {
-        note.textContent = 'Network error. Please try again.';
-      } finally {
-        button.disabled = false;
-        button.textContent = 'Request access';
-      }
-    });
-  </script>
+  <script src="/script.js" defer></script>
 </body>
 </html>

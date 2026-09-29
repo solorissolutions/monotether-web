@@ -163,6 +163,61 @@ h3 { font-size: 1.15rem; letter-spacing: -0.01em; }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .footer__tag, .footer__copy { font-family: var(--mono); font-size: .78rem; color: var(--grey); }
 
+/* ---------- ChoirMaster OS page ---------- */
+.product__more { margin-top: 32px; }
+
+.cm-hero__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+.cm-hero__title { font-size: clamp(2.8rem, 7vw, 5.5rem); }
+.cm-hero__free { margin-top: 20px; font-family: var(--mono); font-size: .8rem; color: var(--grey); }
+
+.chat { background: var(--ink); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 0 80px rgba(46,230,214,.06); }
+.chat__bar { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.chat__bar span { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.chat__bar em { margin-left: auto; font-style: normal; font-family: var(--mono); font-size: .72rem; color: var(--grey); }
+.chat__body { padding: 20px; display: grid; gap: 14px; font-family: var(--mono); font-size: .86rem; line-height: 1.55; }
+.chat__body b { display: block; font-weight: 500; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+.chat__you { color: var(--white); }
+.chat__you b { color: var(--grey); }
+.chat__os { color: #cfd1d4; padding-left: 12px; border-left: 2px solid var(--accent); }
+.chat__os b { color: var(--accent); }
+.caret { display: inline-block; width: 8px; height: 1.05em; background: var(--white); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.chat figcaption { padding: 0 20px 14px; font-family: var(--mono); font-size: .68rem; color: #55575c; text-align: right; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.card { background: var(--black); padding: 36px 32px 40px; transition: background .3s; }
+.card:hover { background: var(--ink); }
+.card__num { display: block; font-family: var(--mono); font-size: .8rem; color: var(--accent); margin-bottom: 28px; }
+.card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.card p { color: var(--grey); max-width: 30em; }
+
+.downloads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.dl { border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 8px; }
+.dl__arch { font-family: var(--mono); font-size: .78rem; color: var(--accent); letter-spacing: .08em; }
+.dl h3 { font-size: 1.6rem; }
+.dl p:not(.dl__arch) { color: var(--grey); margin-bottom: 20px; }
+.dl__btn { margin-top: auto; align-self: flex-start; cursor: not-allowed; color: var(--grey); }
+.dl__btn:hover { border-color: var(--line); color: var(--grey); transform: none; }
+.dl__note { margin-top: 24px; color: var(--grey); font-size: .95rem; }
+.dl__note a { color: var(--white); border-bottom: 1px solid var(--accent); }
+
+.plans { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.plan { border: 1px solid #e3e3e3; border-radius: 16px; padding: 32px; }
+.plan--soon { background: #f6f6f6; }
+.plan__name { font-family: var(--mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: #55575c; }
+.plan__price { font-family: var(--display); font-weight: 700; font-size: 2.4rem; letter-spacing: -0.03em; margin: 6px 0 20px; }
+.plan ul { list-style: none; display: grid; gap: 10px; }
+.plan li { padding-left: 24px; position: relative; }
+.plan li::before { content: ""; position: absolute; left: 0; top: .6em; width: 12px; height: 2px; background: #00a89a; }
+.plan__note { margin-top: 20px; font-size: .9rem; color: #55575c; }
+
+.cm-access__art { width: 140px; margin-bottom: 24px; }
+
+@media (max-width: 860px) {
+  .cm-hero__inner { grid-template-columns: 1fr; gap: 48px; }
+  .cards, .downloads, .plans { grid-template-columns: 1fr; }
+}
+
 /* Responsive */
 @media (max-width: 860px) {
   .nav__links { display: none; }
