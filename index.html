@@ -139,6 +139,7 @@
         <form class="signup" id="signup">
           <label for="email" class="sr-only">Email address</label>
           <input id="email" name="email" type="email" required placeholder="you@email.com" autocomplete="email">
+          <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" class="btn">Request access</button>
         </form>
         <p class="signup__note" id="signup-note" role="status"></p>
@@ -159,16 +160,46 @@
   </footer>
 
   <script>
-    // Waitlist: swap CONTACT_EMAIL (or replace with a form endpoint) when ready.
+    // Waitlist: paste your Google Apps Script Web app URL here (see README).
+    // Left empty, the form falls back to opening an email to CONTACT_EMAIL.
+    const SHEET_ENDPOINT = '';
     const CONTACT_EMAIL = 'hello@monotether.com';
+
     document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('signup').addEventListener('submit', (e) => {
+
+    const form = document.getElementById('signup');
+    const note = document.getElementById('signup-note');
+    const button = form.querySelector('button');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const subject = encodeURIComponent('ChoirMaster OS early access');
-      const body = encodeURIComponent('Please add me to the early access list: ' + email);
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-      document.getElementById('signup-note').textContent = "You're on the list. Welcome to the choir.";
+      const email = form.email.value.trim();
+
+      if (!SHEET_ENDPOINT) {
+        const subject = encodeURIComponent('ChoirMaster OS early access');
+        const body = encodeURIComponent('Please add me to the early access list: ' + email);
+        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Sending…';
+      note.textContent = '';
+      try {
+        // Simple form-encoded POST; no-cors because Apps Script redirects the response.
+        await fetch(SHEET_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: new URLSearchParams({ email, company: form.company.value, source: location.href }),
+        });
+        form.reset();
+        note.textContent = "You're on the list. Welcome to the choir.";
+      } catch {
+        note.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Request access';
+      }
     });
   </script>
 </body>
