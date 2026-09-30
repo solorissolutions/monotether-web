@@ -8,6 +8,7 @@
   --paper-grey: #5c5e63;
   --accent: #2ee6d6;
   --wrap: 1160px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
   --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -83,9 +84,11 @@ h3 { font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
 .hero__mark {
   position: absolute; right: -6%; top: 50%; transform: translateY(-50%);
   width: min(52vw, 640px); opacity: .07; pointer-events: none;
+  translate: var(--mx, 0) var(--my, 0);
+  transition: translate 1.2s var(--ease);
   animation: spin 120s linear infinite;
 }
-@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+@keyframes spin { to { rotate: 360deg; } }
 
 /* Generic section */
 .section { padding: 140px 0; border-bottom: 1px solid var(--line); }
@@ -178,6 +181,67 @@ h3 { font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .footer p { font-size: .9rem; color: var(--grey); }
 
+/* ---------- Motion ---------- */
+
+/* Fluid background (WebGL canvas injected by script.js) */
+.hero__fluid {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0;
+  transition: opacity 2.4s ease;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+          mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+.hero__fluid.is-on { opacity: 1; }
+
+/* Hero intro: lines rise from behind a mask, then the rest un-blurs in */
+.js .hero__title .line { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+.js .hero__title .line > span { display: block; transform: translateY(105%); }
+.js .hero .label,
+.js .hero__lead,
+.js .hero__cta { opacity: 0; filter: blur(8px); transform: translateY(16px); }
+.js .hero__mark { opacity: 0; }
+
+.is-ready .hero__title .line > span { transform: none; transition: transform 1.3s var(--ease); }
+.is-ready .hero__title .line:nth-child(2) > span { transition-delay: .12s; }
+.is-ready .hero .label,
+.is-ready .hero__lead,
+.is-ready .hero__cta { opacity: 1; filter: none; transform: none; transition: opacity 1s var(--ease), filter 1s var(--ease), transform 1.2s var(--ease); }
+.is-ready .hero .label { transition-delay: .05s; }
+.is-ready .hero__lead { transition-delay: .35s; }
+.is-ready .hero__cta { transition-delay: .5s; }
+.is-ready .hero__mark { opacity: .07; transition: opacity 2.4s ease .3s, translate 1.2s var(--ease); }
+
+/* Scroll reveals */
+.js [data-reveal] {
+  opacity: 0; filter: blur(10px); transform: translateY(28px);
+  transition: opacity .9s var(--ease), filter .9s var(--ease), transform 1.1s var(--ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.js [data-reveal].is-in { opacity: 1; filter: none; transform: none; }
+
+/* Ruled lines draw in from the left */
+.js .cols > div, .js .steps li, .js .plan { border-top-color: transparent; position: relative; }
+.js .cols > div::after, .js .steps li::after, .js .plan::after {
+  content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 100%;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 1.4s var(--ease); transition-delay: calc(var(--i, 0) * 90ms + .1s);
+}
+.js .plan::after { height: 2px; top: -2px; }
+.js .cols > div.is-in::after, .js .steps li.is-in::after, .js .plan.is-in::after { transform: none; }
+.js .cols > div::after, .js .steps li::after { color: var(--white); }
+
+/* Penguin: gentle float plus mouse parallax */
+.split__art img, .access__art {
+  translate: var(--px, 0) var(--py, 0);
+  transition: translate 1.2s var(--ease);
+  animation: float 7s ease-in-out infinite;
+}
+@keyframes float { 50% { transform: translateY(-12px); } }
+
+/* Buttons and links: a smoother feel */
+.btn { transition: background .3s var(--ease), color .3s var(--ease), transform .4s var(--ease); }
+.btn:active { transform: scale(.97); }
+
 /* Responsive */
 @media (max-width: 860px) {
   .nav__links { display: none; }
@@ -199,4 +263,8 @@ h3 { font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
+  .js [data-reveal], .js .hero .label, .js .hero__lead, .js .hero__cta,
+  .js .hero__title .line > span { opacity: 1 !important; filter: none !important; transform: none !important; }
+  .js .hero__mark { opacity: .07; }
+  .js .cols > div::after, .js .steps li::after, .js .plan::after { transform: none; }
 }
