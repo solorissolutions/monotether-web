@@ -23,7 +23,7 @@ if (form) form.addEventListener('submit', async (e) => {
     });
     if (res.ok) {
       form.reset();
-      note.textContent = "You're on the list. Welcome to the choir.";
+      note.textContent = "Thanks. You're on the list.";
     } else {
       const data = await res.json().catch(() => ({}));
       const errors = data.errors || [];
