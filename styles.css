@@ -112,6 +112,7 @@ h3 { font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
 .cols > div { border-top: 1px solid var(--white); padding-top: 24px; }
 .cols h3 { font-size: 1.6rem; margin-bottom: 12px; }
 .cols p { color: var(--grey); max-width: 28em; }
+.footnote { margin-top: 56px; color: var(--grey); font-size: .95rem; }
 
 /* Spoken examples (ChoirMaster) */
 .said { border-top: 1px solid var(--line); }
